@@ -1,0 +1,25 @@
+services:
+ web-sever:
+   image: nginx:latest
+   container_name: webserver-callservices
+   restart: always
+   depends_on:
+     - django-web
+   ports:
+     - "36147:80"
+   volumes:
+     - ./:/var/www
+     - ./../Dockerfiles/nginx:/etc/nginx/conf.d
+   
+ django-web:
+   build: .
+   container_name: django-docker
+   ports:
+     - "8080:8080"
+   environment:
+     DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+     DEBUG: ${DEBUG}
+     DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+     DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+   env_file:
+     - .env
